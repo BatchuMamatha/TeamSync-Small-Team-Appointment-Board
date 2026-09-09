@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TeamSync | Modern Appointment Board for Teams</title>
+  <meta name="description" content="A fast, conflict-free appointment scheduling board for small teams. View, schedule, update, complete, and cancel appointments with zero double-booking." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- App Container -->
+  <div class="app-layout">
+    
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <path d="m9 16 2 2 4-4"></path>
+          </svg>
+          <div class="brand-text">
+            <div class="brand-title">TeamSync <span class="brand-badge">PRO</span></div>
+            <div class="brand-subtitle">Small Team Appointment Board</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <!-- Live System Status & Current Time -->
+        <div class="time-display" id="currentTimeDisplay">
+          <span class="live-dot"></span>
+          <span id="headerLiveDate">Today</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="btnAbout" class="btn btn-secondary" title="View application architecture & assumptions">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>How It Works</span>
+        </button>
+
+        <button id="btnResetSamples" class="btn btn-ghost" title="Reinitialize sample appointments">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+            <path d="M21 3v5h-5"></path>
+            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+            <path d="M3 21v-5h5"></path>
+          </svg>
+          <span>Reset Samples</span>
+        </button>
+
+        <button id="btnOpenAddModal" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>New Appointment</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Metrics Overview Cards -->
+      <section class="stats-overview" id="statsOverview">
+        <div class="stat-card" data-filter="all">
+          <div class="stat-icon stat-icon-total">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-label">Total Bookings</div>
+          </div>
+        </div>
+
+        <div class="stat-card" data-filter="scheduled">
+          <div class="stat-icon stat-icon-scheduled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value" id="statScheduled">0</div>
+            <div class="stat-label">Scheduled / Upcoming</div>
+          </div>
+        </div>
+
+        <div class="stat-card" data-filter="completed">
+          <div class="stat-icon stat-icon-completed">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value" id="statCompleted">0</div>
+            <div class="stat-label">Completed</div>
+          </div>
+        </div>
+
+        <div class="stat-card" data-filter="cancelled">
+          <div class="stat-icon stat-icon-cancelled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value" id="statCancelled">0</div>
+            <div class="stat-label">Cancelled (Freed Slots)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter & Control Toolbar -->
+      <section class="toolbar">
+        <div class="toolbar-row-top">
+          <!-- Date Presets & Picker -->
+          <div class="date-controls">
+            <span class="control-label">Date Filter:</span>
+            <div class="pill-group" id="datePillGroup">
+              <button class="pill active" data-date="all">All Dates</button>
+              <button class="pill" data-date="today">Today</button>
+              <button class="pill" data-date="tomorrow">Tomorrow</button>
+            </div>
+            
+            <div class="custom-date-wrapper">
+              <input type="date" id="customDateInput" class="date-input" title="Filter by specific date" />
+              <button id="btnClearCustomDate" class="btn-icon-clear hidden" title="Clear specific date">×</button>
+            </div>
+          </div>
+
+          <!-- Status Filter Tabs -->
+          <div class="status-controls">
+            <span class="control-label">Status:</span>
+            <div class="pill-group" id="statusPillGroup">
+              <button class="pill active" data-status="all">All</button>
+              <button class="pill" data-status="scheduled">Scheduled</button>
+              <button class="pill" data-status="completed">Completed</button>
+              <button class="pill" data-status="cancelled">Cancelled</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="toolbar-row-bottom">
+          <!-- Search Input -->
+          <div class="search-box">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search by title, description, team member, client..." />
+            <button id="btnClearSearch" class="btn-clear-search hidden">✕</button>
+          </div>
+
+          <!-- View Switcher (Board vs List) -->
+          <div class="view-switch-wrapper">
+            <span class="control-label">View:</span>
+            <div class="view-switch-buttons">
+              <button id="btnViewBoard" class="btn-toggle active" title="Kanban Board View">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+                <span>Board</span>
+              </button>
+              <button id="btnViewList" class="btn-toggle" title="Timeline List View">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <span>List / Timeline</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Status Feedback Bar -->
+        <div class="active-filter-indicator" id="filterIndicator" style="display: none;">
+          <span id="filterIndicatorText">Filtered view active</span>
+          <button id="btnResetAllFilters" class="btn-link">Reset all filters</button>
+        </div>
+      </section>
+
+      <!-- View Container 1: Kanban Board View -->
+      <section class="board-container" id="boardView">
+        <!-- Lane: Scheduled / Upcoming -->
+        <div class="board-column" id="laneScheduled">
+          <div class="column-header column-header-scheduled">
+            <div class="column-title-group">
+              <span class="column-dot dot-scheduled"></span>
+              <h3>Scheduled / Upcoming</h3>
+            </div>
+            <span class="column-badge" id="countScheduled">0</span>
+          </div>
+          <div class="column-cards" id="cardsScheduled">
+            <!-- Dynamic appointment cards -->
+          </div>
+        </div>
+
+        <!-- Lane: Completed -->
+        <div class="board-column" id="laneCompleted">
+          <div class="column-header column-header-completed">
+            <div class="column-title-group">
+              <span class="column-dot dot-completed"></span>
+              <h3>Completed</h3>
+            </div>
+            <span class="column-badge" id="countCompleted">0</span>
+          </div>
+          <div class="column-cards" id="cardsCompleted">
+            <!-- Dynamic appointment cards -->
+          </div>
+        </div>
+
+        <!-- Lane: Cancelled -->
+        <div class="board-column" id="laneCancelled">
+          <div class="column-header column-header-cancelled">
+            <div class="column-title-group">
+              <span class="column-dot dot-cancelled"></span>
+              <h3>Cancelled</h3>
+            </div>
+            <span class="column-badge" id="countCancelled">0</span>
+          </div>
+          <div class="column-cards" id="cardsCancelled">
+            <!-- Dynamic appointment cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- View Container 2: Chronological Timeline List View -->
+      <section class="list-container hidden" id="listView">
+        <div class="timeline-wrapper" id="timelineList">
+          <!-- Dynamic timeline items grouped by date -->
+        </div>
+      </section>
+
+      <!-- Empty State -->
+      <div class="empty-state hidden" id="emptyState">
+        <div class="empty-icon">📅</div>
+        <h3 id="emptyTitle">No appointments found</h3>
+        <p id="emptySubtitle">Try selecting a different date/status filter, or add a new appointment.</p>
+        <button id="btnEmptyAdd" class="btn btn-primary" style="margin-top: 1rem;">+ Add Appointment</button>
+      </div>
+
+    </main>
+
+    <!-- Footer with helpful quick notes -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <span>TeamSync Appointment Board • Built for Small Teams</span>
+        <div class="footer-links">
+          <button class="footer-btn" id="footerAboutBtn">Architecture & Assumptions</button>
+          <span>•</span>
+          <span class="footer-tag">Double-Booking Guard Active</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal 1: Add / Edit Appointment -->
+  <div class="modal-overlay hidden" id="appointmentModal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon-badge" id="modalIconBadge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="modalTitle" class="modal-heading">Add New Appointment</h2>
+            <p class="modal-subheading">Fill in the details below. Overlaps with existing slots will be prevented.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btnCloseModal" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="appointmentForm" class="modal-form" novalidate>
+        <input type="hidden" id="formAppointmentId" />
+
+        <!-- Form Error Banner -->
+        <div class="alert-banner alert-error hidden" id="formErrorBanner">
+          <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="formErrorMessage">Please fix the highlighted errors.</span>
+        </div>
+
+        <!-- Title -->
+        <div class="form-group">
+          <label for="formTitle" class="form-label">
+            Appointment Title <span class="required-star">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="formTitle" 
+            name="title" 
+            class="form-input" 
+            placeholder="e.g. Q4 Strategy Review, Client Onboarding" 
+            maxlength="120"
+            required 
+          />
+          <div class="field-error-hint hidden" id="titleError">Title is required.</div>
+        </div>
+
+        <!-- Date & Time Row -->
+        <div class="form-row form-row-3">
+          <div class="form-group">
+            <label for="formDate" class="form-label">
+              Date <span class="required-star">*</span>
+            </label>
+            <input 
+              type="date" 
+              id="formDate" 
+              name="date" 
+              class="form-input" 
+              required 
+            />
+            <div class="field-error-hint hidden" id="dateError">Valid date required.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="formStartTime" class="form-label">
+              Start Time <span class="required-star">*</span>
+            </label>
+            <input 
+              type="time" 
+              id="formStartTime" 
+              name="start_time" 
+              class="form-input" 
+              step="300"
+              required 
+            />
+            <div class="field-error-hint hidden" id="startTimeError">Start time required.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="formEndTime" class="form-label">
+              End Time <span class="required-star">*</span>
+            </label>
+            <input 
+              type="time" 
+              id="formEndTime" 
+              name="end_time" 
+              class="form-input" 
+              step="300"
+              required 
+            />
+            <div class="field-error-hint hidden" id="endTimeError">Must be after start time.</div>
+          </div>
+        </div>
+
+        <!-- Duration calculation preview -->
+        <div class="duration-preview-bar" id="durationPreview">
+          <span class="preview-clock-icon">⏱</span>
+          <span id="durationPreviewText">Select times to see duration</span>
+        </div>
+
+        <!-- Team Assignee & Client Row -->
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label for="formAssignee" class="form-label">Team Member / Host</label>
+            <select id="formAssignee" name="assignee" class="form-input form-select">
+              <option value="Sarah Chen (Lead PM)">Sarah Chen (Lead PM)</option>
+              <option value="David Kim (Full Stack Eng)">David Kim (Full Stack Eng)</option>
+              <option value="Alex Rivera (Design Lead)">Alex Rivera (Design Lead)</option>
+              <option value="Elena Rostova (Principal Arch)">Elena Rostova (Principal Arch)</option>
+              <option value="General Team">General Team</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="formClient" class="form-label">Client / Attendee</label>
+            <input 
+              type="text" 
+              id="formClient" 
+              name="client" 
+              class="form-input" 
+              placeholder="e.g. Acme Corp, Intern, Core Team" 
+            />
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="formDescription" class="form-label">Description / Agenda Notes</label>
+          <textarea 
+            id="formDescription" 
+            name="description" 
+            class="form-textarea" 
+            rows="3" 
+            placeholder="Key discussion points, meeting links, or prep materials..."
+          ></textarea>
+        </div>
+
+        <!-- Status (only shown on Edit) -->
+        <div class="form-group hidden" id="formStatusGroup">
+          <label for="formStatus" class="form-label">Status</label>
+          <select id="formStatus" name="status" class="form-input form-select">
+            <option value="scheduled">Scheduled / Upcoming</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <div class="form-hint-note">Note: Marking as cancelled frees up this time slot for other bookings.</div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelModal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitAppointment">
+            <span id="submitBtnText">Create Appointment</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: "How It Works & Assumptions" Info Modal -->
+  <div class="modal-overlay hidden" id="aboutModal">
+    <div class="modal-card modal-card-large" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon-badge info-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <div>
+            <h2 class="modal-heading">How TeamSync Works & Assumptions</h2>
+            <p class="modal-subheading">Practical Task: Full Stack Developer Intern assessment submission</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btnCloseAboutModal" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-scroll-body">
+        <div class="info-section">
+          <h3>⚡ Core Workflow & Key Features</h3>
+          <ul class="info-checklist">
+            <li><strong>Board & Timeline Views:</strong> Toggle between an intuitive 3-lane Kanban board (Scheduled, Completed, Cancelled) and a chronological list/timeline grouped by day.</li>
+            <li><strong>Filtering & Realtime Search:</strong> Filter instantaneously by status, quick date chips ("Today", "Tomorrow", "All Dates"), or pick any custom date. Instant search filters across title, description, team member, and client.</li>
+            <li><strong>Full Appointment Lifecycle:</strong> Create, edit, mark as completed, cancel, or reopen appointments with immediate visual status badges.</li>
+            <li><strong>Visual Feedback & State:</strong> Clear toast notifications confirm every action, and validation banners explain exactly what went wrong when an input is invalid.</li>
+          </ul>
+        </div>
+
+        <div class="info-section">
+          <h3>🛡️ Double-Booking & Conflict Detection Engine</h3>
+          <p>
+            The system strictly guards against two appointments occupying the same time slot on the same date.
+          </p>
+          <div class="code-box">
+            <code>Overlap Rule: (new_start &lt; existing_end) &amp;&amp; (new_end &gt; existing_start)</code>
+          </div>
+          <ul class="info-bullets">
+            <li><strong>Adjacent Slots Allowed:</strong> An appointment ending at <code>10:00</code> and another starting at <code>10:00</code> are non-overlapping and permitted.</li>
+            <li><strong>Cancelled Slots Freed Up:</strong> When an appointment is cancelled, it remains visible for auditing/history, but its slot is freed so teammates can book it immediately.</li>
+            <li><strong>Safe Updates:</strong> When editing an appointment, its own slot is excluded from conflict checking, allowing updates to description or title without false alarms.</li>
+            <li><strong>Descriptive Conflicts:</strong> If a collision occurs, the system informs the user of the conflicting meeting's name and exact time range.</li>
+          </ul>
+        </div>
+
+        <div class="info-section">
+          <h3>💡 Key Assumptions Made</h3>
+          <ol class="info-ordered">
+            <li><strong>Shared Small Team Calendar:</strong> The board serves a small, tightly coordinated team where time slots represent shared conference/client capacity, so any conflicting booking on that date is prevented.</li>
+            <li><strong>Cancelled Retained:</strong> Cancelled appointments stay on the board in the "Cancelled" lane with distinctive styling to maintain an audit trail rather than being deleted silently.</li>
+            <li><strong>Instant Pre-seeded Data:</strong> Pre-populated with realistic sample appointments (today, tomorrow, upcoming) representing different statuses to facilitate immediate review.</li>
+            <li><strong>Storage Persistence:</strong> Data is persisted in <code>server/data/appointments.json</code>, surviving server restarts and test runs. A <strong>Reset Samples</strong> button is provided to restore the initial test state anytime.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnCloseAboutBtn">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
