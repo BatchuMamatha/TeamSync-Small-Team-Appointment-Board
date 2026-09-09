@@ -6,19 +6,23 @@ A full-stack, responsive web application built for a small team to view, add, up
 
 ## 📸 Visual Verification — White & Orange Modern Theme
 
-### 1. Main Kanban Board View
+### 1. React + FastAPI Edition (Vite & Python)
+*Interactive Kanban board with Scheduled, Completed, and Cancelled swimlanes connected to FastAPI backend.*
+![React + FastAPI Board](./docs/screenshots/react_fastapi_board.png)
+
+### 2. Main Kanban Board View Overview
 *View appointments organized across three interactive swimlanes: Scheduled, Completed, and Cancelled with clear visual indicators.*
 ![Main Kanban Board View](./docs/screenshots/board_view.png)
 
-### 2. Add / Edit Appointment Modal
+### 3. Add / Edit Appointment Modal
 *Quick booking dialog with automatic duration calculation and slot validation.*
 ![Add Appointment Modal](./docs/screenshots/add_appointment_modal.png)
 
-### 3. Chronological Timeline List View
+### 4. Chronological Timeline List View
 *Alternative day-by-day chronological view grouped by date.*
 ![Timeline List View](./docs/screenshots/timeline_view.png)
 
-### 4. Real-Time Slot Conflict Prevention Engine
+### 5. Real-Time Slot Conflict Prevention Engine
 *Attempting to book an overlapping time slot is instantly blocked with the conflicting meeting details.*
 ![Conflict Prevention Engine](./docs/screenshots/conflict_prevention.png)
 
@@ -64,6 +68,26 @@ function isTimeOverlapping(startA, endA, startB, endB) {
 
 ## 🧪 Automated Tests Summary
 
+### 1. Python FastAPI Backend Test Suite
+Command:
+```bash
+python backend_fastapi/test_api.py
+```
+Result:
+```text
+test_cancelled_appointment_frees_slot (__main__.TestAppointmentConflictAndValidation) ... ok
+test_create_and_prevent_conflict (__main__.TestAppointmentConflictAndValidation) ... ok
+test_editing_appointment_ignores_self_collision (__main__.TestAppointmentConflictAndValidation) ... ok
+test_interval_overlap_logic (__main__.TestAppointmentConflictAndValidation) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.043s
+
+OK
+--- Running TeamSync FastAPI & SQLAlchemy Test Suite ---
+```
+
+### 2. Node.js Express Test Suite
 Command:
 ```bash
 npm test
@@ -86,17 +110,27 @@ ALL CONFLICT & VALIDATION TESTS PASSED SUCCESSFULLY! (10/10 assertions)
 
 ## 🚀 Quick Execution Guide
 
+### Option A: React + FastAPI Stack
 ```bash
-# 1. Install dependencies
+# Terminal 1: Backend
+cd backend_fastapi
+pip install -r requirements.txt
+python run.py
+
+# Terminal 2: Frontend
+cd frontend_react
 npm install
+npm run dev
+```
+- Frontend: `http://localhost:5173`
+- Backend Swagger Docs: `http://localhost:8000/docs`
 
-# 2. Run automated test suite
-npm test
-
-# 3. Start application
+### Option B: Node.js Express Stack
+```bash
+npm install
 npm start
 ```
-Access the application at: `http://localhost:3000`
+- Web Application: `http://localhost:3000`
 
 ---
 
