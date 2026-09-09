@@ -165,9 +165,10 @@ Contributions are welcome! If you would like to help enhance TeamSync:
 If you encounter any bugs or have feature suggestions, please feel free to submit an issue with reproduction steps.
 
 ### Credits / Authors
-- **Author**: Full Stack Developer Intern candidate
-- **Practical Task**: Appointment Board for Small Team
-- **Built with**: Node.js, Express, JavaScript, HTML5, CSS3, Plus Jakarta Sans & Inter fonts by Google Fonts.
+- **Author**: **Batchu Mamatha** ([@BatchuMamatha](https://github.com/BatchuMamatha))
+- **Email**: [Batchumamatha631@gmail.com](mailto:Batchumamatha631@gmail.com)
+- **Role**: Full Stack Developer
+- **Project**: TeamSync — Small Team Appointment Board
 
 ### License
 This project is open-source software licensed under the **[MIT License](https://opensource.org/licenses/MIT)**. You are free to use, modify, and distribute this software for personal or commercial purposes.

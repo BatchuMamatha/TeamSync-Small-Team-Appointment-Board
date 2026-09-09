@@ -9,7 +9,7 @@
     "test": "node server/test_conflicts.js"
   },
   "keywords": ["appointment", "booking", "team", "calendar"],
-  "author": "Full Stack Intern",
+  "author": "Batchu Mamatha <Batchumamatha631@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

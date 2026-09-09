@@ -97,3 +97,11 @@ npm test
 npm start
 ```
 Access the application at: `http://localhost:3000`
+
+---
+
+## 👤 Author & Credits
+- **Author**: **Batchu Mamatha** ([@BatchuMamatha](https://github.com/BatchuMamatha))
+- **Email**: [Batchumamatha631@gmail.com](mailto:Batchumamatha631@gmail.com)
+- **Role**: Full Stack Developer
+- **Project**: TeamSync — Small Team Appointment Board
